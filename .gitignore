@@ -1,0 +1,22 @@
+# Prerequisites & IDEs
+.vscode/
+.vs/
+*.user
+*.suo
+
+# Build artifacts & directories
+build/
+bin/*.exe
+bin/*.pdb
+bin/*.ilk
+bin/BankSystem
+
+# Temporary & Object Files
+*.obj
+*.o
+*.out
+*.log
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
