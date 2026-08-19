@@ -2,15 +2,15 @@
 
 [![C++ Standard](https://img.shields.io/badge/C%2B%2B-17-blue.svg?style=flat&logo=c%2B%2B)](https://en.cppreference.com/w/cpp/17)
 [![Build Engine](https://img.shields.io/badge/Build-CMake%20v3.16+-brightgreen.svg?style=flat&logo=cmake)](https://cmake.org/)
-[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg?style=flat)](https://github.com/)
-[![Architecture](https://img.shields.io/badge/Architecture-3--Tier%20Layered%20%2F%20Clean%20OOD-orange.svg?style=flat)](https://github.com/)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg?style=flat)](https://github.com/Abdullah-Shalgam/NexusBank-Core-OOP-Engine)
+[![Architecture](https://img.shields.io/badge/Architecture-3--Tier%20Layered%20%2F%20Clean%20OOD-orange.svg?style=flat)](https://github.com/Abdullah-Shalgam/NexusBank-Core-OOP-Engine)
 [![License](https://img.shields.io/badge/License-MIT-green.svg?style=flat)](LICENSE)
 
-**NexusBank Core** is a robust, modular, high-reliability console banking and foreign exchange (FX) transactional platform engineered with **Modern C++17**. The system demonstrates production-grade Object-Oriented Design (OOD), bitmask-driven Role-Based Access Control (RBAC), multi-layered data serialization with custom ciphers, and full ACID-inspired transaction safety with automatic state rollbacks.
+**NexusBank Core** is a robust, modular, educational-focused console banking and foreign exchange (FX) transactional platform engineered with **Modern C++17**. The system demonstrates production-grade Object-Oriented Design (OOD), bitmask-driven Role-Based Access Control (RBAC), multi-layered data serialization with custom ciphers, and full ACID-inspired transaction safety with automatic state rollbacks.
 
 ---
 
-## 📑 Table of Contents
+## 🗂️ Table of Contents
 1. [Architectural Overview](#-architectural-overview)
 2. [Domain Models & Data Flow](#-domain-models--data-flow)
 3. [Deep-Dive Engineering & Design Patterns](#-deep-dive-engineering--design-patterns)
@@ -20,7 +20,7 @@
 7. [Comprehensive Build & Execution Guide](#-comprehensive-build--execution-guide)
 8. [Repository Structure](#-repository-structure)
 9. [Default Credentials & Initial State](#-default-credentials--initial-state)
-10. [Author & License](#-author--license)
+10. [Author & Engineering Standards](#-author--engineering-standards)
 
 ---
 
@@ -30,21 +30,21 @@ NexusBank Core adopts an enterprise **N-Tier Layered Architecture**, establishin
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                           PRESENTATION LAYER (UI)                       │
-│   clsLoginScreen | clsMainScreen | clsTransactionsScreen | clsFXScreens │
+│                         PRESENTATION LAYER (UI)                         │
+│  clsLoginScreen | clsMainScreen | clsTransactionsScreen | clsFXScreens  │
 └────────────────────────────────────┬────────────────────────────────────┘
                                      │ Invokes UI Workflows & Renderers
                                      ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                         DOMAIN CORE & BUSINESS LOGIC                    │
-│      clsPerson (Base) ◄── clsBankClient, clsUser | clsCurrency          │
-│      State Management: Active Session, Rollback Handlers, Bitmasks        │
+│                       DOMAIN CORE & BUSINESS LOGIC                      │
+│     clsPerson (Base) ◄── clsBankClient, clsUser | clsCurrency           │
+│     State Management: Active Session, Rollback Handlers, Bitmasks       │
 └────────────────────────────────────┬────────────────────────────────────┘
                                      │ Uses Utilities & File Converters
                                      ▼
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                     PERSISTENCE & SYSTEM LIBRARIES (Lib)                │
-│  Flat-File Engine (Clients, Users, FX) | DateLib | UtilLib | StringLib │
+│                    PERSISTENCE & SYSTEM LIBRARIES (Lib)                 │
+│  Flat-File Engine (Clients, Users, FX) | DateLib | UtilLib | StringLib  │
 │  Security Layer: Reversible Cipher / PIN & Password Masking / Sanitizer │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
@@ -82,9 +82,9 @@ NexusBank Core adopts an enterprise **N-Tier Layered Architecture**, establishin
        │ (std::fstream read)
        ▼
 [_LoadDataFromFile()] ──> [_ConvertLineToObject()] ──> [Decrypt Cipher] ──> In-Memory Model Object
-                                                                                   │
-                                                                          (Business Mutation)
-                                                                                   │
+                                                                                 │
+                                                                        (Business Mutation)
+                                                                                 │
 [Persistent Disk Flush] ◄── [Encrypt Cipher] ◄── [_ConvertObjectToLine()] ◄────────┘
 ```
 
@@ -93,18 +93,18 @@ NexusBank Core adopts an enterprise **N-Tier Layered Architecture**, establishin
 ## 🎯 Deep-Dive Engineering & Design Patterns
 
 ### 1. Bitwise Access Control (RBAC Engine)
-Permissions are allocated using binary flags evaluated via Bitwise-AND (`&`) and Bitwise-OR (`|`) operations, yielding constant-time authorization checks:
+Permissions are allocated using binary flags evaluated via Bitwise-AND (`&`) and Bitwise-OR (`|`) operations, yielding constant-time $\mathcal{O}(1)$ authorization checks:
 ```cpp
 enum enMainMenuPermissions {
-    eAll              = -1,   // 11111111...
-    pListClients      = 1,    // 00000001
-    pAddNewClient     = 2,    // 00000010
-    pDeleteClient     = 4,    // 00000100
-    pUpdateClients    = 8,    // 00001000
-    pFindClient       = 16,   // 00010000
-    pTransactions     = 32,   // 00100000
-    pManageUsers      = 64,   // 01000000
-    pLoginRegister    = 128,  // 10000000
+    eAll               = -1,   // 11111111...
+    pListClients       = 1,    // 00000001
+    pAddNewClient      = 2,    // 00000010
+    pDeleteClient      = 4,    // 00000100
+    pUpdateClients     = 8,    // 00001000
+    pFindClient        = 16,   // 00010000
+    pTransactions      = 32,   // 00100000
+    pManageUsers       = 64,   // 01000000
+    pLoginRegister     = 128,  // 10000000
     pCurrencyExchange = 256   // 000100000000
 };
 ```
@@ -175,7 +175,7 @@ DateTime#//#SenderAcc#//#DestAcc#//#Amount#//#SenderBalAfter#//#DestBalAfter#//#
 ### 📦 1. Clone the Repository
 ```bash
 git clone https://github.com/Abdullah-Shalgam/NexusBank-Core-OOP-Engine.git
-cd NexusBank-Core
+cd NexusBank-Core-OOP-Engine
 ```
 
 ---
@@ -187,7 +187,7 @@ cd NexusBank-Core
 cmake -B build -G "MinGW Makefiles"
 
 :: 2. Compile Release binary
-cmake -B build --config Release
+cmake --build build --config Release
 
 :: 3. Enable UTF-8 Support & Run
 chcp 65001
@@ -271,11 +271,11 @@ cd bin
 ## 📂 Repository Structure
 
 ```text
-NexusBank-Core/
+NexusBank-Core-OOP-Engine/
 ├── CMakeLists.txt                      # Root Build Configuration
 ├── README.md                           # Enterprise Architectural Documentation
 │
-├── bin/                                # Compiled Executables & Deployed Assets
+├── bin/                                # Compiled Executables & Output Target
 │   └── BankSystem                      # Executable Output
 │
 ├── data/                               # Persistent Storage Flat-Files
