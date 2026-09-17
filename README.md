@@ -1,17 +1,24 @@
 # 🏦 NexusBank Core — Enterprise Console Banking & ATM Engine
 
-[![C++ Standard](https://img.shields.io/badge/C%2B%2B-17-blue.svg?style=flat&logo=c%2B%2B)](https://en.cppreference.com/w/cpp/17)
-[![Build Engine](https://img.shields.io/badge/Build-CMake%20v3.16+-brightgreen.svg?style=flat&logo=cmake)](https://cmake.org/)
-[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg?style=flat)](https://github.com/Abdullah-Shalgam/NexusBank-Core-OOP-Engine)
-[![Architecture](https://img.shields.io/badge/Architecture-3--Tier%20Layered%20%2F%20Clean%20OOD-orange.svg?style=flat)](https://github.com/Abdullah-Shalgam/NexusBank-Core-OOP-Engine)
-[![License](https://img.shields.io/badge/License-MIT-green.svg?style=flat)](LICENSE)
+<div align="center">
 
-**NexusBank Core** is a robust, modular, educational-focused console banking and foreign exchange (FX) transactional platform engineered with **Modern C++17**. The system demonstrates production-grade Object-Oriented Design (OOD), bitmask-driven Role-Based Access Control (RBAC), multi-layered data serialization with custom ciphers, and full ACID-inspired transaction safety with automatic state rollbacks.
+[![C++ Standard](https://img.shields.io/badge/C%2B%2B-17-blue.svg?style=for-the-badge&logo=c%2B%2B)](https://en.cppreference.com/w/cpp/17)
+[![OOP Architecture](https://img.shields.io/badge/Architecture-Object--Oriented-orange?style=for-the-badge&logo=codeforces)](https://github.com/Abdullah-Shalgam/NexusBank-Core-OOP-Engine)
+[![Build Engine](https://img.shields.io/badge/Build-CMake%20v3.16+-brightgreen.svg?style=for-the-badge&logo=cmake)](https://cmake.org/)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg?style=for-the-badge)](https://github.com/Abdullah-Shalgam/NexusBank-Core-OOP-Engine)
+[![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
+
+<p align="center">
+  <b>NexusBank Core</b> is a robust, modular, educational-focused console banking and foreign exchange (FX) transactional platform engineered with <b>Modern C++17</b>. Demonstrating production-grade Object-Oriented Design (OOD), bitmask-driven Role-Based Access Control (RBAC), multi-layered data serialization, and ACID-inspired transaction safety.
+</p>
+
+</div>
 
 ---
 
 ## 🗂️ Table of Contents
-1. [Architectural Overview](#-architectural-overview)
+
+1. [Architectural Overview](#%EF%B8%8F-architectural-overview)
 2. [Domain Models & Data Flow](#-domain-models--data-flow)
 3. [Deep-Dive Engineering & Design Patterns](#-deep-dive-engineering--design-patterns)
 4. [Functional Modules](#-functional-modules)
@@ -20,7 +27,7 @@
 7. [Comprehensive Build & Execution Guide](#-comprehensive-build--execution-guide)
 8. [Repository Structure](#-repository-structure)
 9. [Default Credentials & Initial State](#-default-credentials--initial-state)
-10. [Author & Engineering Standards](#-author--engineering-standards)
+10. [Contact & Developer Info](#-contact--developer-info)
 
 ---
 
@@ -28,7 +35,7 @@
 
 NexusBank Core adopts an enterprise **N-Tier Layered Architecture**, establishing strict decoupling between presentation components, domain logic, and file-based persistence.
 
-```
+```text
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                         PRESENTATION LAYER (UI)                         │
 │  clsLoginScreen | clsMainScreen | clsTransactionsScreen | clsFXScreens  │
@@ -49,16 +56,17 @@ NexusBank Core adopts an enterprise **N-Tier Layered Architecture**, establishin
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Key Architectural Strengths:
-- **Clean Interface Segregation:** Base screen classes (`clsScreen`, `clsUserScreenBase`, `clsClientScreenBase`, `clsCurrencyScreenBase`) abstract styling, headers, audit footprints, and UI authorization filters.
-- **Const-Correct & Copy-Free Semantics:** Minimizes memory footprint and cache invalidation by passing models, string buffers, and collections via `const T&`.
-- **Zero Global Pollution:** Standard header namespaces remain cleanly scoped, and domain entities manage their own record (de)serialization.
+### ✨ Key Architectural Strengths:
+* **Clean Interface Segregation:** Base screen classes (`clsScreen`, `clsUserScreenBase`, `clsClientScreenBase`, `clsCurrencyScreenBase`) abstract styling, headers, audit footprints, and UI authorization filters.
+* **Const-Correct & Copy-Free Semantics:** Minimizes memory footprint and cache invalidation by passing models, string buffers, and collections via `const T&`.
+* **Zero Global Pollution:** Standard header namespaces remain cleanly scoped, and domain entities manage their own record (de)serialization.
 
 ---
 
 ## 🔄 Domain Models & Data Flow
 
 ### Class Inheritance Structure
+
 ```text
                ┌────────────────────────┐
                │        clsPerson       │
@@ -77,6 +85,7 @@ NexusBank Core adopts an enterprise **N-Tier Layered Architecture**, establishin
 ```
 
 ### Persistence Pipeline
+
 ```text
 [Disk Flat-File]
        │ (std::fstream read)
@@ -92,8 +101,10 @@ NexusBank Core adopts an enterprise **N-Tier Layered Architecture**, establishin
 
 ## 🎯 Deep-Dive Engineering & Design Patterns
 
-### 1. Bitwise Access Control (RBAC Engine)
+### 1️⃣ Bitwise Access Control (RBAC Engine)
+
 Permissions are allocated using binary flags evaluated via Bitwise-AND (`&`) and Bitwise-OR (`|`) operations, yielding constant-time $\mathcal{O}(1)$ authorization checks:
+
 ```cpp
 enum enMainMenuPermissions {
     eAll               = -1,   // 11111111...
@@ -105,20 +116,22 @@ enum enMainMenuPermissions {
     pTransactions      = 32,   // 00100000
     pManageUsers       = 64,   // 01000000
     pLoginRegister     = 128,  // 10000000
-    pCurrencyExchange = 256   // 000100000000
+    pCurrencyExchange  = 256   // 000100000000
 };
 ```
 
-### 2. Transaction Integrity & Rollback Protection
+### 2️⃣ Transaction Integrity & Rollback Protection
+
 To guarantee financial consistency during fund transfers:
 1. Sender balance is debited (`Withdraw(Amount)`).
 2. Recipient balance is credited (`DestinationClient.Deposit(Amount)`).
 3. If destination crediting fails, the engine instantly re-credits the sender balance to eliminate state divergence.
 4. An immutable audit log entry is written to `TransferLog.txt`.
 
-### 3. Masked Stream Input & Security Checkpoints
-- Passwords and security PINs are captured char-by-char via direct console hooks with backspace handling and star-masking (`*`).
-- High-risk operations (Client deletion, User permission modification, FX rate reconfiguration) require **Active Session Password Re-Authentication**.
+### 3️⃣ Masked Stream Input & Security Checkpoints
+
+* Passwords and security PINs are captured char-by-char via direct console hooks with backspace handling and star-masking (`*`).
+* High-risk operations (Client deletion, User permission modification, FX rate reconfiguration) require Active Session Password Re-Authentication.
 
 ---
 
@@ -126,11 +139,11 @@ To guarantee financial consistency during fund transfers:
 
 | Module | Core Responsibility | Capabilities |
 | :--- | :--- | :--- |
-| **Authentication & IAM** | Identity and Session Management | Max login lockouts (3 attempts), credential decryption, permission bitmasking. |
-| **Client Management** | Bank Accounts Ledger | Full CRUD lifecycle, unique account assertion, selective field updates. |
-| **Transaction Core** | Financial Ledger & Cash Operations | Deposit, withdrawal validation, account-to-account transfer with rollback, total balance aggregation. |
-| **FX & Currency Engine** | Multi-Currency Conversion | Base-currency conversions (USD Anchor), dynamic global formatting, real-time rate updates. |
-| **Audit Logs & Forensics** | Compliance & Traceability | Comprehensive transfer register (`TransferLog.txt`) and authentication timeline (`LoginRegister.txt`). |
+| **🔐 Authentication & IAM** | Identity & Session Management | Max login lockouts (3 attempts), credential decryption, permission bitmasking. |
+| **👥 Client Management** | Bank Accounts Ledger | Full CRUD lifecycle, unique account assertion, selective field updates. |
+| **💳 Transaction Core** | Financial Operations | Deposit, withdrawal validation, account-to-account transfer with rollback, total balance aggregation. |
+| **💱 FX & Currency Engine** | Multi-Currency Conversion | Base-currency conversions (USD Anchor), dynamic global formatting, real-time rate updates. |
+| **📜 Audit Logs & Forensics** | Compliance & Traceability | Comprehensive transfer register (`TransferLog.txt`) and authentication timeline (`LoginRegister.txt`). |
 
 ---
 
@@ -173,95 +186,34 @@ DateTime#//#SenderAcc#//#DestAcc#//#Amount#//#SenderBalAfter#//#DestBalAfter#//#
 ## 🔨 Comprehensive Build & Execution Guide
 
 ### 📦 1. Clone the Repository
+
 ```bash
 git clone https://github.com/Abdullah-Shalgam/NexusBank-Core-OOP-Engine.git
 cd NexusBank-Core-OOP-Engine
 ```
 
----
-
-### 🪟 Windows (Option A: MinGW / GCC via Command Prompt)
-
-```cmd
-:: 1. Generate build system
-cmake -B build -G "MinGW Makefiles"
-
-:: 2. Compile Release binary
-cmake --build build --config Release
-
-:: 3. Enable UTF-8 Support & Run
-chcp 65001
-cd bin
-BankSystem.exe
-```
-
----
-
-### 🪟 Windows (Option B: Visual Studio / MSVC via Developer Command Prompt)
-
-```cmd
-:: 1. Generate Solution
-cmake -B build
-
-:: 2. Compile Target
-cmake --build build --config Release
-
-:: 3. Execute
-cd bin
-BankSystem.exe
-```
-
----
-
-### 🪟 Windows (Option C: PowerShell / Windows Terminal)
+### 🪟 2. Building on Windows (MinGW / PowerShell)
 
 ```powershell
-# 1. Generate build tree
+# Generate build tree
 cmake -B build -G "MinGW Makefiles"
 
-# 2. Compile target
+# Compile target
 cmake --build build --config Release
 
-# 3. Navigate and Launch Executable
+# Navigate and Launch Executable
 cd bin
 .\BankSystem.exe
 ```
 
----
-
-### 🐧 Linux (Ubuntu, Debian, Arch, Fedora)
+### 🐧 3. Building on Linux / macOS
 
 ```bash
-# 1. Install prerequisites (Ubuntu/Debian example)
-sudo apt update && sudo apt install -y build-essential cmake
-
-# 2. Generate build tree
+# Generate build tree & Compile
 cmake -B build -DCMAKE_BUILD_TYPE=Release
-
-# 3. Build target
 cmake --build build
 
-# 4. Run Application
-cd bin
-./BankSystem
-```
-
----
-
-### 🍏 macOS (Intel & Apple Silicon M-Series)
-
-```zsh
-# 1. Install build tools if missing
-xcode-select --install
-brew install cmake
-
-# 2. Generate build files
-cmake -B build -DCMAKE_BUILD_TYPE=Release
-
-# 3. Build target
-cmake --build build
-
-# 4. Run Application
+# Launch Executable
 cd bin
 ./BankSystem
 ```
@@ -320,18 +272,19 @@ NexusBank-Core-OOP-Engine/
 
 ## 🔑 Default Credentials & Initial State
 
-To test the system immediately upon initial compilation, use the following pre-configured administrative account:
-
 | Attribute | Default Value | Notes |
 | :--- | :--- | :--- |
 | **Username** | `Admin` | Case-insensitive in lookups |
 | **Password** | `1234` | Masked in UI, encrypted as `;<=>` on disk |
-| **Permissions** | `Full Access (-1)` | Bitwise bypass for all menus & operations |
+| **Permissions** | Full Access (`-1`) | Bitwise bypass for all menus & operations |
 
 ---
 
-## 👨‍💻 Author & Engineering Standards
+## 📬 Contact & Developer Info
 
-- **Developer:** [Abdullah Nori Shalgam](https://github.com/Abdullah-Shalgam)
-- **Design Philosophy:** Clean Code, Single Responsibility Principle (SRP), Fail-Safe IO, and Defensive Programming.
-- **License:** Distributed under the [MIT License](LICENSE).
+<p align="left">
+  <a href="https://github.com/Abdullah-Shalgam"><img src="https://img.shields.io/badge/GitHub-Abdullah--Shalgam-181717?style=for-the-badge&logo=github" alt="GitHub"></a>
+  <a href="https://instagram.com/abdullah_shalgam"><img src="https://img.shields.io/badge/Instagram-@abdullah__shalgam-E4405F?style=for-the-badge&logo=instagram" alt="Instagram"></a>
+  <a href="https://wa.me/218931364346"><img src="https://img.shields.io/badge/WhatsApp-%2B218%2093%20136%204346-25D366?style=for-the-badge&logo=whatsapp" alt="WhatsApp"></a>
+  <a href="mailto:bdallhshlghwm500@gmail.com"><img src="https://img.shields.io/badge/Email-bdallhshlghwm500%40gmail.com-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email"></a>
+</p>
